@@ -30,11 +30,11 @@ public class ManagerOrderController {
         return ResponseEntity.ok(orderService.getAllOrders(status));
     }
 
-//    @GetMapping("/{id}")
-//    @Operation(summary = "Get detailed order information")
-//    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id) {
-//        return ResponseEntity.ok(orderService.getOrderById(id));
-//    }
+    @GetMapping("/{id}")
+    @Operation(summary = "Get detailed order information")
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.getOrderById(id));
+    }
 
     @PostMapping("/{id}/approve")
     @Operation(summary = "Approve an order (must be AWAITING_APPROVAL → APPROVED)")
