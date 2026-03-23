@@ -48,6 +48,8 @@ public class SecurityConfig {
                 // Inventory read access for managers
                 .requestMatchers(HttpMethod.GET, "/api/inventory/**").hasAnyRole("WAREHOUSE_MANAGER", "CLIENT")
                 .requestMatchers("/api/inventory/**").hasRole("WAREHOUSE_MANAGER")
+                // Attachments — accessible to both roles
+                .requestMatchers("/api/orders/*/attachments/**").hasAnyRole("CLIENT", "WAREHOUSE_MANAGER")
                 // Client order endpoints
                 .requestMatchers("/api/orders/**").hasAnyRole("CLIENT", "WAREHOUSE_MANAGER")
                 .anyRequest().authenticated()

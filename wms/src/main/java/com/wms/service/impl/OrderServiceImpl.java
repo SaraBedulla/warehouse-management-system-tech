@@ -17,6 +17,7 @@ import com.wms.exception.ResourceNotFoundException;
 import com.wms.repository.InventoryItemRepository;
 import com.wms.repository.OrderRepository;
 import com.wms.repository.UserRepository;
+import com.wms.repository.OrderAttachmentRepository;
 import com.wms.service.OrderActionResolver;
 import com.wms.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final InventoryItemRepository inventoryItemRepository;
     private final OrderActionResolver actionResolver;
+    private final OrderAttachmentRepository attachmentRepository;
 
     // ─── CLIENT ──────────────────────────────────────────────────────────────
 
@@ -139,8 +141,8 @@ public class OrderServiceImpl implements OrderService {
         return orders.stream().map(o -> toResponse(o, Role.CLIENT)).toList();
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public OrderResponse getMyOrderById(Long id, String username) {
         Order order = findOrderById(id);
         assertOwnership(order, username);
@@ -158,8 +160,8 @@ public class OrderServiceImpl implements OrderService {
         return orders.stream().map(o -> toResponse(o, Role.WAREHOUSE_MANAGER)).toList();
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public OrderResponse getOrderById(Long id) {
         return toResponse(findOrderById(id), Role.WAREHOUSE_MANAGER);
     }
@@ -212,7 +214,6 @@ public class OrderServiceImpl implements OrderService {
         log.info("Order '{}' fulfilled", saved.getOrderNumber());
         return toResponse(saved, Role.WAREHOUSE_MANAGER);
     }
-
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
 
@@ -275,6 +276,8 @@ public class OrderServiceImpl implements OrderService {
         List<AvailableAction> actions = actionResolver.resolve(
                 order.getId(), order.getStatus(), callerRole);
 
+        int attachmentCount = attachmentRepository.findByOrderId(order.getId()).size();
+
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
@@ -287,6 +290,7 @@ public class OrderServiceImpl implements OrderService {
                 .items(itemResponses)
                 .totalAmount(total)
                 .availableActions(actions)
+                .attachmentCount(attachmentCount)
                 .build();
     }
 }

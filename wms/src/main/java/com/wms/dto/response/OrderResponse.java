@@ -26,11 +26,7 @@ public class OrderResponse {
     private String declineReason;
     private List<OrderItemResponse> items;
     private BigDecimal totalAmount;
-
-    /**
-     * Dynamic list of actions available to the requesting user for this order.
-     * Each action includes everything the frontend needs to render a button:
-     * label, endpoint, HTTP method, color, and whether a request body is needed.
-     */
     private List<AvailableAction> availableActions;
+    private int attachmentCount;
 }
+
