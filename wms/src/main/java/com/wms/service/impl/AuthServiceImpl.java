@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .fullName(request.getFullName())
                 .email(request.getEmail())
-                .role(Role.CLIENT)   // self-registration is always CLIENT
+                .role(Role.CLIENT)
                 .enabled(true)
                 .build();
 

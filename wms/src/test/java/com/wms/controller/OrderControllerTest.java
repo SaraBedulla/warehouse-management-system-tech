@@ -12,6 +12,7 @@ import com.wms.service.OrderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(OrderController.class)
 @DisplayName("OrderController")
+@AutoConfigureMockMvc(addFilters = false)
 class OrderControllerTest {
 
     @Autowired MockMvc mockMvc;
@@ -50,12 +52,12 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("POST /api/orders — returns 201 for CLIENT")
-    @WithMockUser(username = "client1", roles = "CLIENT")
+    @WithMockUser(username = "ana", roles = "CLIENT")
     void createOrder_success() throws Exception {
         CreateOrderRequest req = new CreateOrderRequest();
         req.setItems(List.of());
 
-        when(orderService.createOrder(any(), eq("client1"))).thenReturn(sampleOrder);
+        when(orderService.createOrder(any(), eq("ana"))).thenReturn(sampleOrder);
 
         mockMvc.perform(post("/api/orders").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -77,9 +79,9 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("GET /api/orders — returns list for CLIENT")
-    @WithMockUser(username = "client1", roles = "CLIENT")
+    @WithMockUser(username = "ana", roles = "CLIENT")
     void getMyOrders() throws Exception {
-        when(orderService.getMyOrders("client1", null)).thenReturn(List.of(sampleOrder));
+        when(orderService.getMyOrders("ana", null)).thenReturn(List.of(sampleOrder));
 
         mockMvc.perform(get("/api/orders"))
                 .andExpect(status().isOk())

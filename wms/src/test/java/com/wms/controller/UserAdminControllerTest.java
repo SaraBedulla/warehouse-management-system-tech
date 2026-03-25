@@ -12,6 +12,7 @@ import com.wms.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserAdminController.class)
 @DisplayName("UserAdminController")
+@AutoConfigureMockMvc(addFilters = false)
 class UserAdminControllerTest {
 
     @Autowired MockMvc mockMvc;
@@ -58,6 +60,7 @@ class UserAdminControllerTest {
 
         mockMvc.perform(post("/api/admin/users").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
+
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value("manager1"))
