@@ -23,13 +23,13 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        if (!userRepository.existsByUsername("manager")) {
+        if (!userRepository.existsByUsername("admin")) {
             User user = new User();
-            user.setUsername("manager");
-            user.setFullName("Manager");
-            user.setEmail("sara@yahoo.com");
-            user.setPassword(passwordEncoder.encode("123456"));
-            user.setRole(Role.WAREHOUSE_MANAGER);
+            user.setUsername("admin");
+            user.setFullName("admin123");
+            user.setEmail("admin@yahoo.com");
+            user.setPassword(passwordEncoder.encode("admin123"));
+            user.setRole(Role.SYSTEM_ADMIN);
             userRepository.save(user);
         }
     }
